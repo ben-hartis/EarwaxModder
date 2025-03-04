@@ -1,0 +1,2 @@
+EarwaxMover.exe
+pause

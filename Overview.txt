@@ -1,0 +1,44 @@
+Using a mix of PowerShell scripting and C++ exes, This will be a small terminal app to
+automate adding custom sounds into jackbox games, specifically earwax.
+
+Basic Pseudo code:
+Create a new .jet file and add as "custom content" in the manifest?
+Basic Pseudo code:
+- Read current file id from saved note
+- Look in file containing edited sound clips
+	- Read each files' name, save it in memory with id number
+	- Move the file into the jackbox Earwaxaudio\audio
+	- Rename it to id, save id in list
+	- Repeat until no .ogg files are left in directory
+- Open up EarwaxAudio.jet
+	- Refer to memory
+	- Enter template into audio .jet file, using saved name and id
+	- repeat until last line of memory
+
+File templates:
+- Audio files - 
+{
+        "x": false,
+        "name": "default",
+        "short": "default",
+        "id": last + 1,
+        "categories": ["alarm", "music","sexual","violence","electronic/machine","crowd",
+			"sports","liquid","tools","bodily functions","Animal",
+			"vehicle","human","household"]
+}
+
+- backup -
+
+{
+        "x": false,
+        "name": "samsung ringtone",
+        "short": "samsung ringtone",
+        "id": 25745,
+        "categories": ["alarm", "music"]
+    }, {
+        "x": false,
+        "name": "pallet stun",
+        "short": "pallet stun",
+        "id": 25746,
+        "categories": ["violence"]
+    }
