@@ -4,5 +4,4 @@
         "short": "default",
         "id": last + 1,
         "categories": ["violence"]
-}]
-}
+}]}

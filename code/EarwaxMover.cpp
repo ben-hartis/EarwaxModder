@@ -2,12 +2,13 @@
 #include <fstream>
 #include <filesystem>
 #include <vector>
+#include <string>
 
 namespace fs = std::filesystem;
 
-std::string dataPath = "D:\\Projects\\Hybrid\\Jackbox mod menu\\data.txt";
-std::string audioDir = "D:\\Projects\\Hybrid\\Jackbox mod menu\\cut";
-std::string gamePath = "D:\\Program Files (x86)\\Steam\\steamapps\\common\\The Jackbox Party Pack 2\\games\\Earwax\\content";
+std::string dataPath = "C:\\Projects\\EarwaxModder\\data.txt";
+std::string audioDir = "C:\\Projects\\EarwaxModder\\cut";
+std::string gamePath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\The Jackbox Party Pack 2\\games\\Earwax\\content";
 
 //TODO replace with dynamic array, stop going over limit
 //Vector can't iterate lie array, need to change modify loop
@@ -39,19 +40,18 @@ int findEnd(std::string path, char want){
   return loc-1;
 }
 
-std::string editData(int index){
+void editData(int index, std::ofstream& file){
   std::string name = fname.at(index);
   std::string id = std::to_string(fileID.at(index));
   
   std::string ret = 
-  "{\n"
-    "  \"x\": false,\n \"name\": \""+name+"\",\n"
-    "  \"short\": \""+name+"\",\n"
-    "  \"id\": " + id + ",\n"
+    "  \"x\": false, \"name\": \""+name+"\","
+    "  \"short\": \""+name+"\","
+    "  \"id\": " + id + ","
     "  \"categories\": [\"violence\"]"
-  "\n}";
+    "}";
 
-  return ret;
+  file << ret;
 }
 
 void updateAudio(/*std::string name, std::string id*/){
@@ -68,24 +68,30 @@ void updateAudio(/*std::string name, std::string id*/){
     (temp tags first, select random later)
 
   */
-  std::string testPath = "D:\\Projects\\Hybrid\\Jackbox mod menu\\test.txt"; 
+  std::string testPath = "C:\\Projects\\EarwaxModder\\test.txt";//changed for desktop 
   int loc = findEnd(testPath, ']');
   std::fstream test(testPath);
   test.seekg(loc, std::fstream::beg);
   char myChar = test.peek();
   std::cout << "loc = " << loc << "\nChar = " << myChar << "\nPointer at " << test.tellg() << '\n';
+  char rep[] = ",{";
+  test.seekp(loc+1);
+  test.write(rep, 2);
   test.close();
   //using fstream, remove chars of } and ], replacing with a "," and whitespace if can't use null,
   // then open in append to write
   std::ofstream oTest;
   oTest.open(testPath, std::ofstream::app);
   std::cout <<"loc = "<< loc << " write pointer at " << oTest.tellp() << "\n";
-
-  for(int i = 0; i < 2; i++){
-    std::string ent = editData(i);
-    oTest << ent << ",";
+  
+  //hardcoded number of files, only adds 2
+  //edit data outside of loop so ,{ format is correct, (works but ugly)
+  editData(0, oTest);
+  for(int i = 1; i < 2; i++){
+    oTest << ",{";
+    editData(i, oTest);
   }
-  oTest << "]\n}";
+  oTest << "]}";
 }
 
 //need to check for directory and create if not
